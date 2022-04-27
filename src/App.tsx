@@ -1,23 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useState, useEffect} from 'react';
+import {genRandomListOfNumbers} from './utils/genRandomListOfNumbers'
+import {Dashboard} from './components/Dashboard'
+
+import './assets/css/App.css';
+
 
 function App() {
+  const [loading, setLoading] = useState(true)
+  const [list, setList] = useState(genRandomListOfNumbers(0))
+
+  useEffect(() => {
+      let timer = setTimeout(() => setLoading(false),5000);
+
+      // This will clear timeout
+      return () => {
+          clearTimeout(timer);
+      };
+  },[])
+
+  function refreshListing(seed: number){
+      setList(genRandomListOfNumbers(seed))
+  }
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+       <Dashboard loading={loading} listing={list} refreshListing={refreshListing} />
       </header>
     </div>
   );
